@@ -8,7 +8,7 @@ sources:
   prometheus:
     type: prometheus_scrape
     endpoints:
-      - http://clickhouse:9363/metrics
+      - http://localhost:9363/metrics
     scrape_interval_secs: 15
     scrape_timeout_secs: 5
 

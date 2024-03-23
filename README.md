@@ -52,6 +52,7 @@ Then start them all at the same time with:
 
 ```
 service clickhouse-server restart
+service clickhouse-server enable
 ```
 
 ## Verify setup
@@ -92,3 +93,21 @@ It's simple to move keeper to its own nodes, just clone the docker file and drop
 ## Logging and metrics
 
 Vector is setup on each node, you'll need to replace the sink and configure as needed. See `vector/vector.yaml`
+
+Install vector with
+
+```
+bash -c "$(curl -L https://setup.vector.dev)"
+sudo apt-get install vector -y
+```
+
+```
+cp vector/vector.yaml /etc/vector/vector.yaml
+```
+
+```
+service vector restart
+service vector enable
+```
+
+If this fails to start, just run `vector` to see what the logs are.
