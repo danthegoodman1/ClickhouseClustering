@@ -24,7 +24,8 @@ find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYNODE/myhostname
 You might also want to replace the default password:
 
 ```
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYPASSWORD/yourpassword/g'
+export PASSWORD=$(echo -n 'mysecretpassword' | sha256sum | tr -d '-' | tr -d ' ')
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e "s/MYPASSWORDSHA/$PASSWORD/g"
 ```
 
 ## Verify setup

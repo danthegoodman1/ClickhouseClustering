@@ -10,7 +10,7 @@
     </profiles>
     <users>
         <default>
-            <password>MYPASSWORD</password>
+            <password_sha256_hex>MYPASSWORDSHA</password_sha256_hex>
             <access_management>1</access_management>
             <profile>default</profile>
             <networks>
