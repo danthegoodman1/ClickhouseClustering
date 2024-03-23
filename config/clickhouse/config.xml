@@ -1,6 +1,6 @@
 <clickhouse replace="true">
     <logger>
-        <level>debug</level>
+        <level>information</level>
         <log>/var/log/clickhouse-server/clickhouse-server.log</log>
         <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
         <size>1000M</size>
@@ -43,15 +43,15 @@
     <zookeeper>
         <node>
             <host>NODE1HOST</host>
-            <port>2181</port>
+            <port>9181</port>
         </node>
         <node>
             <host>NODE2HOST</host>
-            <port>2181</port>
+            <port>9181</port>
         </node>
         <node>
             <host>NODE3HOST</host>
-            <port>2181</port>
+            <port>9181</port>
         </node>
     </zookeeper>
     <macros>
@@ -80,4 +80,33 @@
         -->
         <formatting>json</formatting>
     </logger>
+
+    <keeper_server>
+        <tcp_port>9181</tcp_port>
+        <server_id>MYNODEID</server_id>
+        <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+        <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+        <coordination_settings>
+            <operation_timeout_ms>10000</operation_timeout_ms>
+            <session_timeout_ms>30000</session_timeout_ms>
+            <raft_logs_level>information</raft_logs_level>
+        </coordination_settings>
+        <raft_configuration>
+            <server>
+                <id>1</id>
+                <hostname>NODE1HOST</hostname>
+                <port>9234</port>
+            </server>
+            <server>
+                <id>2</id>
+                <hostname>NODE2HOST</hostname>
+                <port>9234</port>
+            </server>
+            <server>
+                <id>3</id>
+                <hostname>NODE3HOST</hostname>
+                <port>9234</port>
+            </server>
+        </raft_configuration>
+    </keeper_server>
 </clickhouse>

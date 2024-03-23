@@ -11,22 +11,11 @@ services:
     ports:
       - "8123:8123"
       - "9000:9000"
+      - "9009:9009"
       - "9363:9363"
-    depends_on:
-      - zk
+      - "9181:9181"
+      - "9234:9234"
     restart: unless-stopped
-  zk:
-    container_name: zk
-    hostname: zk
-    image: bitnami/zookeeper:latest
-    ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-      - ZOO_SERVER_ID=MYNODEID
-      - ZOO_SERVERS=0.0.0.0:2888:3888,NODE2HOST:2888:3888,NODE3HOST:2888:3888
   # vector:
   #   image: timberio/vector:0.36.1-debian
   #   volumes:
