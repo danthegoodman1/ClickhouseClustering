@@ -6,7 +6,7 @@
         <size>1000M</size>
         <count>3</count>
     </logger>
-    <display_name>mycluster MYNODE</display_name>
+    <display_name>MYNODE</display_name>
     <listen_host>0.0.0.0</listen_host>
     <http_port>8123</http_port>
     <tcp_port>9000</tcp_port>
@@ -21,7 +21,7 @@
     <distributed_ddl>
         <path>/clickhouse/task_queue/ddl</path>
     </distributed_ddl>
-    <remote_servers >
+    <remote_servers>
         <mycluster>
             <shard>
                 <internal_replication>true</internal_replication>
@@ -43,15 +43,15 @@
     <zookeeper>
         <node>
             <host>NODE1HOST</host>
-            <port>9181</port>
+            <port>2181</port>
         </node>
         <node>
             <host>NODE2HOST</host>
-            <port>9181</port>
+            <port>2181</port>
         </node>
         <node>
             <host>NODE3HOST</host>
-            <port>9181</port>
+            <port>2181</port>
         </node>
     </zookeeper>
     <macros>

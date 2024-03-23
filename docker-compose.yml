@@ -13,18 +13,20 @@ services:
       - "9000:9000"
       - "9363:9363"
     depends_on:
-      - clickhouse-keeper
+      - zk
     restart: unless-stopped
-  clickhouse-keeper:
-    image: "clickhouse/clickhouse-keeper:latest"
-    container_name: clickhouse-keeper
-    hostname: clickhouse-keeper
-    volumes:
-     - ${PWD}/config/keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml
-     - ${PWD}/logs/clickhouse-keeper/:/var/log/clickhouse-keeper
+  zk:
+    container_name: zk
+    hostname: zk
+    image: bitnami/zookeeper:latest
     ports:
-        - "9181:9181"
-    restart: unless-stopped
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVER_ID=MYNODEID
+      - ZOO_SERVERS=0.0.0.0:2888:3888,NODE2HOST:2888:3888,NODE3HOST:2888:3888
   # vector:
   #   image: timberio/vector:0.36.1-debian
   #   volumes:

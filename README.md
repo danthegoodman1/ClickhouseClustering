@@ -21,6 +21,17 @@ Also run this, but the value of `myhostname` should change per node.
 find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYNODE/myhostname/g'
 ```
 
+Then set the keeper config (change the first line depending on node):
+
+```
+find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/MYNODEID/node1/g'
+find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE1HOST/1.1.1.1/g'
+find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE2HOST/2.2.2.2/g'
+find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE3HOST/3.3.3.3/g'
+```
+
+You also need to manually change the respective node IP address to be `0.0.0.0:2888:3888` so it knows to listen properly.
+
 You might also want to replace the default password:
 
 ```
@@ -47,12 +58,12 @@ to verify that your node is connected to keeper.
 Then, you can create replicated tables on cluster:
 
 ```sql
-CREATE TABLE testtable ON CLUSTER '{cluster}'
+CREATE TABLE test ON CLUSTER '{cluster}'
 (
     timestamp DateTime,
     contractid UInt32,
     userid UInt32
-) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/testtable', '{replica}')
+) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/test', '{replica}')
 PARTITION BY toYYYYMM(timestamp)
 ORDER BY (contractid, toDate(timestamp), userid)
 SAMPLE BY userid;
