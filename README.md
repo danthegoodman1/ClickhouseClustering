@@ -58,12 +58,12 @@ to verify that your node is connected to keeper.
 Then, you can create replicated tables on cluster:
 
 ```sql
-CREATE TABLE test ON CLUSTER '{cluster}'
+CREATE TABLE aa ON CLUSTER '{cluster}'
 (
     timestamp DateTime,
     contractid UInt32,
     userid UInt32
-) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/test', '{replica}')
+) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/aa', '{replica}')
 PARTITION BY toYYYYMM(timestamp)
 ORDER BY (contractid, toDate(timestamp), userid)
 SAMPLE BY userid;
