@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   clickhouse:
-    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+    image: "clickhouse/clickhouse-server:latest"
     user: "101:101"
     container_name: clickhouse
     hostname: clickhouse
@@ -16,7 +16,7 @@ services:
       - clickhouse-keeper
     restart: unless-stopped
   clickhouse-keeper:
-    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+    image: "clickhouse/clickhouse-keeper:latest"
     user: "101:101"
     container_name: clickhouse-keeper
     hostname: clickhouse-keeper
@@ -26,7 +26,7 @@ services:
         - "127.0.0.1:9181:9181"
     restart: unless-stopped
   vector:
-    image: vector timberio/vector:0.36.1-debian
+    image: timberio/vector:0.36.1-debian
     volumes:
       - ${PWD}/config/vector/vector.yaml:/etc/vector/vector.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
