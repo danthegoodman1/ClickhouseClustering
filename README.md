@@ -10,4 +10,6 @@ Find and replace command:
 
 ```
 find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE1HOST/1.1.1.1/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE2HOST/2.2.2.2/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE3HOST/3.3.3.3/g'
 ```
