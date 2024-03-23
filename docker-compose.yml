@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   clickhouse:
-    image: "clickhouse/clickhouse-server:latest"
+    image: "clickhouse/clickhouse-server:24.2.2"
     container_name: clickhouse
     hostname: clickhouse
     volumes:
@@ -9,12 +8,12 @@ services:
       - ${PWD}/config/clickhouse/users.xml:/etc/clickhouse-server/users.d/users.xml
       - ${PWD}/logs/clickhouse-server/:/var/log/clickhouse-server/
     ports:
-      - "8123:8123"
-      - "9000:9000"
-      - "9009:9009"
-      - "9363:9363"
-      - "9181:9181"
-      - "9234:9234"
+      - 8123:8123
+      - 9000:9000
+      - 9009:9009
+      - 9363:9363
+      - 9181:9181
+      - 9234:9234
     restart: unless-stopped
   # vector:
   #   image: timberio/vector:0.36.1-debian
