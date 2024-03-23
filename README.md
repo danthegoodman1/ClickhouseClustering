@@ -1,6 +1,19 @@
 # Clickhouse Docker Compose
 
-## Running
+## Setup
+
+```
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg
+curl -fsSL 'https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key' | sudo gpg --dearmor -o /usr/share/keyrings/clickhouse-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/clickhouse-keyring.gpg] https://packages.clickhouse.com/deb stable main" | sudo tee \
+    /etc/apt/sources.list.d/clickhouse.list
+sudo apt-get update
+```
+
+```
+sudo apt-get install -y clickhouse-server clickhouse-client
+```
 
 In this placeholder, the nodes for 1, 2, and 3 have their IPs listed as `NODE1HOST`, `NODE2HOST`, and `NODE3HOST` respectively.
 
@@ -11,46 +24,48 @@ There is a configuration file for each host, it is up to you to mount the right 
 On every node, run this (replacing your hosts):
 
 ```
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE1HOST/1.1.1.1/g'
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE2HOST/2.2.2.2/g'
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE3HOST/3.3.3.3/g'
+find . -type f -name "/etc/clickhouse-server/config.d/config.xml" -print0 | xargs -0 sed -i'' -e 's/NODE1HOST/1.1.1.1/g'
+find . -type f -name "/etc/clickhouse-server/config.d/config.xml" -print0 | xargs -0 sed -i'' -e 's/NODE2HOST/2.2.2.2/g'
+find . -type f -name "/etc/clickhouse-server/config.d/config.xml" -print0 | xargs -0 sed -i'' -e 's/NODE3HOST/3.3.3.3/g'
 ```
 
-Also run this, but the value of `myhostname` should change per node.
+Also run this, but the value of `myhostname` should change per node (for naming).
 ```
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYNODE/myhostname/g'
+find . -type f -name "/etc/clickhouse-server/config.d/config.xml" -print0 | xargs -0 sed -i'' -e 's/MYNODE/myhostname/g'
 ```
-
-Then set the keeper config (change the first line depending on node):
-
-```
-find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/MYNODEID/node1/g'
-find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE1HOST/1.1.1.1/g'
-find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE2HOST/2.2.2.2/g'
-find . -type f -name "*.yml" -print0 | xargs -0 sed -i'' -e 's/NODE3HOST/3.3.3.3/g'
-```
-
-You also need to manually change the respective node IP address to be `0.0.0.0:2888:3888` so it knows to listen properly.
 
 You might also want to replace the default password:
 
 ```
 export PASSWORD=$(echo -n 'mysecretpassword' | sha256sum | tr -d '-' | tr -d ' ')
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e "s/MYPASSWORDSHA/$PASSWORD/g"
+find . -type f -name "/etc/clickhouse-server/users.d/users.xml" -print0 | xargs -0 sed -i'' -e "s/MYPASSWORDSHA/$PASSWORD/g"
+```
+
+Copy the `config.d` and `users.d` files into the `/etc/clickhouse-server/{config,users}.d` directories respectively.
+
+```
+cp config.d/config.xml /etc/clickhouse-server/config.d/config.xml
+cp users.d/users.xml /etc/clickhouse-server/users.d/users.xml
+```
+
+Then start them all at the same time with:
+
+```
+service clickhouse-server restart
 ```
 
 ## Verify setup
 
 On each clickhouse node, run:
 
-```
-clickhouse-client -q "SELECT * FROM system.clusters WHERE cluster='mycluster' FORMAT Vertical;"
+```sql
+SELECT * FROM system.clusters WHERE cluster='mycluster' FORMAT Vertical
 ```
 
 that you node is aware of replicas, and:
 
-```
-clickhouse-client -q "select * from system.zookeeper where path='/clickhouse/task_queue/'"
+```sql
+select * from system.zookeeper where path='/clickhouse/task_queue/'
 ```
 
 to verify that your node is connected to keeper.
@@ -76,4 +91,4 @@ It's simple to move keeper to its own nodes, just clone the docker file and drop
 
 ## Logging and metrics
 
-Vector is setup on each node, you'll need to replace the sink and configure as needed. See `config/vector/vector.yaml`
+Vector is setup on each node, you'll need to replace the sink and configure as needed. See `vector/vector.yaml`
