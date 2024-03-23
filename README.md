@@ -11,14 +11,20 @@ There is a configuration file for each host, it is up to you to mount the right 
 On every node, run this (replacing your hosts):
 
 ```
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE1HOST/1.1.1.1/g'
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE2HOST/2.2.2.2/g'
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/NODE3HOST/3.3.3.3/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE1HOST/1.1.1.1/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE2HOST/2.2.2.2/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/NODE3HOST/3.3.3.3/g'
 ```
 
 Also run this, but the value of `myhostname` should change per node.
 ```
-find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/MYNODE/myhostname/g'
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYNODE/myhostname/g'
+```
+
+You might also want to replace the default password:
+
+```
+find . -type f -name "*.xml" -print0 | xargs -0 sed -i'' -e 's/MYPASSWORD/yourpassword/g'
 ```
 
 ## Verify setup
