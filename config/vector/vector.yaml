@@ -1,0 +1,31 @@
+api:
+  enabled: true
+  address: 127.0.0.1:8686
+
+sources:
+  docker:
+    type: docker_logs
+  prometheus:
+    type: prometheus_scrape
+    endpoints:
+      - http://clickhouse:9363/metrics
+    scrape_interval_secs: 15
+    scrape_timeout_secs: 5
+
+
+transforms:
+  drop_self:
+    type: filter
+    inputs:
+      - docker
+    condition: .container_name != "vector"
+
+sinks:
+  axiom:
+    type: axiom
+    inputs:
+      - drop_self
+      - prometheus
+    compression: gzip
+    token: ${AXIOM_TOKEN}
+    dataset: ${AXIOM_DATASET}

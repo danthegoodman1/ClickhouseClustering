@@ -1,6 +1,6 @@
 # Clickhouse Docker Compose
 
-Run this docker compose on each distinct node, replacing the IPs for each node.
+## Running
 
 In this placeholder, the nodes for 1, 2, and 3 have their IPs listed as `NODE1HOST`, `NODE2HOST`, and `NODE3HOST` respectively.
 
@@ -20,3 +20,42 @@ Also run this, but the value of `myhostname` should change per node.
 ```
 find . -type f -name "*.xml" -print0 | xargs -0 sed -i '' -e 's/MYNODE/myhostname/g'
 ```
+
+## Verify setup
+
+On each clickhouse node, run:
+
+```
+clickhouse-client -q "SELECT * FROM system.clusters WHERE cluster='mycluster' FORMAT Vertical;"
+```
+
+that you node is aware of replicas, and:
+
+```
+clickhouse-client -q "select * from system.zookeeper where path='/clickhouse/task_queue/'"
+```
+
+to verify that your node is connected to keeper.
+
+Then, you can create replicated tables on cluster:
+
+```sql
+CREATE TABLE testtable ON CLUSTER '{cluster}'
+(
+    timestamp DateTime,
+    contractid UInt32,
+    userid UInt32
+) ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/testtable', '{replica}')
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (contractid, toDate(timestamp), userid)
+SAMPLE BY userid;
+```
+
+## Running keeper on dedicated nodes
+
+It's simple to move keeper to its own nodes, just clone the docker file and drop the clickhouse service (and drop the keeper on the original).
+
+
+## Logging and metrics
+
+Vector is setup on each node, you'll need to replace the sink and configure as needed. See `config/vector/vector.yaml`
