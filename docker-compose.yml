@@ -9,9 +9,9 @@ services:
       - ${PWD}/config/clickhouse/users.xml:/etc/clickhouse-server/users.d/users.xml
       - ${PWD}/logs/clickhouse-server/:/var/log/clickhouse-server/
     ports:
-      - "127.0.0.1:8123:8123"
-      - "127.0.0.1:9000:9000"
-      - "127.0.0.1:9363:9363"
+      - "8123:8123"
+      - "9000:9000"
+      - "9363:9363"
     depends_on:
       - clickhouse-keeper
     restart: unless-stopped
@@ -23,7 +23,7 @@ services:
      - ${PWD}/config/keeper/keeper_config.xml:/etc/clickhouse-keeper/keeper_config.xml
      - ${PWD}/logs/clickhouse-keeper/:/var/log/clickhouse-keeper
     ports:
-        - "127.0.0.1:9181:9181"
+        - "9181:9181"
     restart: unless-stopped
   # vector:
   #   image: timberio/vector:0.36.1-debian
