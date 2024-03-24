@@ -56,7 +56,7 @@
     </zookeeper>
     <macros>
         <shard>01</shard>
-        <replica>MYNODE</replica>
+        <replica>MYNODEREPLICA</replica>
         <cluster>mycluster</cluster>
     </macros>
 

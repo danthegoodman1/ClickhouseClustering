@@ -16,3 +16,15 @@ services:
       - "9181:9181"
       - "9234:9234"
     restart: unless-stopped
+    network_mode: host # HOLY HELL THIS IS NEEDED
+  vector:
+    image: timberio/vector:0.36.1-debian
+    volumes:
+      - ${PWD}/config/vector/vector.yaml:/etc/vector/vector.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+    command:
+      - --config
+      - /etc/vector/vector.yaml
