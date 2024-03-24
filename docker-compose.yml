@@ -3,7 +3,6 @@ services:
   clickhouse:
     image: "clickhouse/clickhouse-server:latest"
     container_name: clickhouse
-    hostname: clickhouse
     volumes:
       - ${PWD}/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
       - ${PWD}/config.d/docker_related_config.xml:/etc/clickhouse-server/config.d/docker_related_config.xml
