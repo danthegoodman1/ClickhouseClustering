@@ -87,7 +87,7 @@ SAMPLE BY userid;
 
 ## Running keeper on dedicated nodes
 
-It's simple to move keeper to its own nodes, just clone the docker file and drop the clickhouse service (and drop the keeper on the original).
+It's simple to move keeper to its own nodes, just clone the config file and drop the clickhouse configs.
 
 
 ## Logging and metrics
